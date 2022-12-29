@@ -54,9 +54,8 @@ Rails.application.routes.draw do
     end
 
     resources :cinemas, only: %i[edit update destroy] do
-      resources :seats, only: %i[index new create]
-      get '/seats/edit', to: 'seats#edit'
-      patch '/seats/update', to: 'seats#update'
+      resource :seats, only: %i[new create edit update]
+      get '/seats/index', to: 'seats#index'
     end
 
     resources :movies do

@@ -1,26 +1,22 @@
-<div class="continer text-white">
-  <div class="d-flex">
-    <div class="main flex-grow-1 p-0 ms-1">
-      <div class="container container-breadcrumb ">
-        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-          <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href=<%= admin_movies_path %>>後台首頁</a></li>
-            <li class="breadcrumb-item" aria-current="page">
-              <a href=<%= admin_theater_cinemas_path(@cinema.theater_id) %>>影廳列表</a>
-            </li>
-            <li class="breadcrumb-item active" aria-current="page">新增座位</li>
-          </ol>
-        </nav>
-      </div>
-      <div class="container">
-        <div class="screen">銀幕位置</div>
-        <br>
-        <div data-controller="admin--seats--add-seats" data-id="<%= @cinema.id %>" data-maxrow="<%= @cinema.max_row %>" data-maxcolumn="<%= @cinema.max_column %>" >
-          <div class="grid"></div>
-          <br>
-          <button class="btn btn-primary" data-action="click->admin--seats--add-seats#addToTable">建立座位</button>
-        </div>
-      </div>
+<div class="main flex-grow-1 p-0 ms-1">
+  <div class="container container-breadcrumb ">
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href=<%= admin_movies_path %>>後台首頁</a></li>
+        <li class="breadcrumb-item" aria-current="page">
+          <a href=<%= admin_theater_cinemas_path(@cinema.theater_id) %>>影廳列表</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">新增座位</li>
+      </ol>
+    </nav>
+  </div>
+  <div class="container">
+    <div class="screen">銀幕位置</div>
+    <br>
+    <div data-controller="admin--seats--create-seats" data-cinema-id="<%= @cinema.id %>">
+      <div class="grid"></div>
+      <br>
+      <button class="btn btn-primary" data-action="click->admin--seats--create-seats#createToTable">建立座位</button>
     </div>
   </div>
 </div>

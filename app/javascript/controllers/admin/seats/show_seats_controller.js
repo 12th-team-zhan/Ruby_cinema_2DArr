@@ -2,29 +2,45 @@ import { Controller } from "stimulus";
 
 export default class extends Controller {
   connect() {
-    this.maxRow = parseInt(this.element.dataset.maxrow);
-    this.maxColumn = parseInt(this.element.dataset.maxcolumn);
-    this.seatNotAdded = this.element.dataset.notAdded;
+    const token = document.querySelector("meta[name='csrf-token']").content;
+    const cinemaId = this.element.dataset.cinemaId;
 
-    this.makeSeatingChart(this.maxRow, this.maxColumn);
+    fetch(`/admin/cinemas/${cinemaId}/seats/index.json`, {
+      method: "GET",
+      headers: {
+        "X-csrf-Token": token,
+      },
+    })
+      .then((resp) => {
+        return resp.json();
+      })
+      .then(({ seatList }) => {
+        this.seatList = seatList;
+
+        this.maxRow = this.seatList.length;
+        this.maxColumn = this.seatList[0].length;
+
+        this.makeSeatingChart(this.seatList, this.maxRow, this.maxColumn);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
-  makeSeatingChart(maxR, maxC) {
+  makeSeatingChart(seats, row, column) {
     const grid = this.element.firstElementChild;
-    grid.style.cssText += `grid-template-rows: repeat(${maxR}, 1fr);grid-template-columns: repeat(${maxC + 2}, 1fr);`;
+    grid.style.cssText += `grid-template-rows: repeat(${row}, 1fr);grid-template-columns: repeat(${column + 2}, 1fr);`;
 
     let seatList = "";
-    for (var r = 1; r <= maxR; r++) {
-      let RowId = `<div class="text-center text-dark">${String.fromCharCode(r + 64)}</div>`;
+    for (let r = 0; r < row; r++) {
+      let RowId = `<div class="text-center">${String.fromCharCode(r + 65)}</div>`;
       seatList += RowId;
-      for (let c = 1; c <= maxC; c++) {
-        let seatIdStr = `"${((r - 1) * maxC + c).toString()}"`;
+      for (let c = 0; c < column; c++) {
+        let columnId = `<div class="seat-item" data-row-id=${r} data-column-id=${c}>${String(c + 1).padStart(2, "0")}</div>`;
 
-        let columnId = `<div class="seat-item">${String(c).padStart(2, "0")}</div>`;
-        if (this.seatNotAdded.includes(seatIdStr)) {
-          columnId = `<div class="seat-item bg-transparent text-dark">${String(c).padStart(2, "0")}</div>`;
+        if (seats[r][c] == 0) {
+          columnId = `<div class="seat-item bg-transparent" data-row-id=${r} data-column-id=${c}>${String(c + 1).padStart(2, "0")}</div>`;
         }
-
         seatList += columnId;
       }
       seatList += RowId;
