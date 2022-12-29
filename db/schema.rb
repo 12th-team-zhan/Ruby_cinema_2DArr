@@ -122,13 +122,19 @@ ActiveRecord::Schema.define(version: 2023_01_01_155555) do
     t.bigint "user_id", null: false
     t.string "serial"
     t.integer "status", default: 0
-    t.integer "payment_method", default: 0
     t.datetime "deleted_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "amount", default: 0
     t.string "slug"
     t.index ["slug"], name: "index_orders_on_slug", unique: true
+    t.string "movie_name"
+    t.string "theater_name"
+    t.string "cinema_name"
+    t.integer "regular_quantity", default: 0
+    t.integer "concession_quantity", default: 0
+    t.integer "elderly_quantity", default: 0
+    t.integer "disability_quantity", default: 0
     t.index ["user_id"], name: "index_orders_on_user_id"
   end
 
@@ -166,23 +172,18 @@ ActiveRecord::Schema.define(version: 2023_01_01_155555) do
   end
 
   create_table "tickets", force: :cascade do |t|
-    t.string "seat"
+    t.integer "row"
+    t.integer "column"
     t.integer "status", default: 0
     t.string "serial"
-    t.integer "category"
-    t.datetime "deleted_at"
     t.integer "showtime_id"
+    t.datetime "deleted_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "regular_quantity", default: 0
-    t.integer "concession_quantity", default: 0
-    t.integer "elderly_quantity", default: 0
-    t.integer "disability_quantity", default: 0
-    t.string "movie_name"
-    t.string "cinema_name"
-    t.string "theater_name"
     t.bigint "order_id"
     t.index ["order_id"], name: "index_tickets_on_order_id"
+    t.bigint "user_id"
+    t.index ["user_id"], name: "index_tickets_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
