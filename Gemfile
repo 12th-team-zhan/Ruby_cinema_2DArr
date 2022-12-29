@@ -10,7 +10,6 @@ gem 'bootsnap', '>= 1.4.4', require: false
 gem 'bootstrap', '~> 5.2.2'
 gem 'dartsass-rails', '~> 0.4.0'
 gem 'devise', '~> 4.8'
-gem 'foreman', '~> 0.87.2'
 gem 'friendly_id', '~> 5.4.0'
 gem 'image_processing'
 gem 'jbuilder', '~> 2.7'
@@ -34,6 +33,7 @@ gem 'will_paginate', '~> 3.3'
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'dotenv-rails', '~> 2.8', '>= 2.8.1'
+  gem 'foreman', '~> 0.87.2'
 end
 
 group :development do

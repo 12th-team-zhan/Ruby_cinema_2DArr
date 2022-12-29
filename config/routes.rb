@@ -29,6 +29,16 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :tickets, only: %i[index show new create destroy] do
+    member do
+      get :pay
+    end
+    collection do
+      get :select_amount
+      post :checkout
+    end
+  end
+
   resources :find_showtimes, only: %i[index] do
     collection do
       get 'search'
@@ -50,10 +60,9 @@ Rails.application.routes.draw do
     end
 
     resources :theaters, except: %i[show] do
-      resources :cinemas, only: %i[index new create]
+      resources :cinemas, shallow: true
     end
-
-    resources :cinemas, only: %i[edit update destroy] do
+    resources :cinemas do
       resource :seats, only: %i[new create edit update]
       get '/seats/index', to: 'seats#index'
     end
@@ -71,8 +80,6 @@ Rails.application.routes.draw do
 
   resources :ticketing, only: %i[show create destroy] do
     collection do
-      get :pay
-      get :select_tickets
       get :select_seats
       post :tickets
       post :checkout

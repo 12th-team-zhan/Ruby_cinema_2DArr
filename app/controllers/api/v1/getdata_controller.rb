@@ -24,11 +24,13 @@ module Api
                                                                                                                                                              :id).map do |showtime, id|
           [showtime.strftime('%Y-%m-%d'), showtime.strftime('%I:%M %p'), id]
         end
+
         render json: showtime_date
       end
 
       def selected_tickets
         user_selected = {}
+
         $redis.smembers("showtime_#{params[:showtime_id]}").each do |user_id|
           user_selected[user_id] = $redis.smembers(user_id)
         end

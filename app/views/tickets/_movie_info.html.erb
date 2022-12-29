@@ -1,0 +1,24 @@
+<div class="movie-info container-md d-flex px-lg-4p pt-4">
+  <div class="col-3 poster me-3 d-none d-sm-block">
+    <%= image_tag movie.movie_poster, class: "m-auto w-100" %>
+  </div>
+  <div class="col-9 text flex-grow-1 gap-2">
+    <ul class="list-group pb-3">
+      <li class="list-group-item ps-0 pt-0 fs-3 title"><%= movie.name %></li>
+      <li class="list-group-item ps-0 fw-semibold">
+        級別：<%= Movie.human_attribute_name("film_rating.#{movie.film_rating}") %>
+      </li>
+      <li class="list-group-item ps-0 fw-semibold">
+        地點：<%= theater.name %> - <%= cinema.name %>廳
+      </li>
+      <li class="list-group-item ps-0 fw-semibold">
+        開演時間：<%= start_time %>
+      </li>
+    </ul>
+    <ul class="list-group">
+      <li class="list-group-item ps-0 py-4 fw-semibold">
+        總價: <span class="fs-3 fw-semibold" data-controller="users--select-amount--update-total-price" data-action="totalAdd@window->users--select-amount--update-total-price#update" data-users--select-amount--update-total-price-target="price">0</span>
+      </li>
+    </ul>
+  </div>
+</div>

@@ -87,7 +87,7 @@ export default class extends Controller {
 
   changeLink() {
     const link = document.querySelector("#rootBuyTickets");
-    link.href = `/ticketing/select_tickets?showtimeid=${this.showtimeTarget.value}`;
+    link.href = `/tickets/select_amount?showtimeid=${this.showtimeTarget.value}`;
   }
 
   checkBookingData(e) {
