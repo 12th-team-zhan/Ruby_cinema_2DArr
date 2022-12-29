@@ -7,9 +7,13 @@ module Admin
     def index
       @seats = @cinema.seats.first
 
-      respond_to do |format|
-        format.html { render :index }
-        format.json { render json: { seatList: @seats.seat_list } }
+      if @seats.nil?
+        redirect_to new_admin_cinema_seats_path(@cinema), alert: '影廳座位未建立'
+      else
+        respond_to do |format|
+          format.html { render :index }
+          format.json { render json: { seatList: @seats.seat_list } }
+        end
       end
     end
 
