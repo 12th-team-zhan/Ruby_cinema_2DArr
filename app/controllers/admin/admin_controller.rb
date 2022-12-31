@@ -2,28 +2,20 @@
 
 module Admin
   class AdminController < ActionController::Base
-    layout 'admin_application'
-    before_action :user_signed_in
+    layout 'admin'
     before_action :current_user_is_staff
+    rescue_from ActiveRecord::RecordNotFound ,with: :record_not_found
 
-    def user_signed_in
-      return if current_user.present?
-
-      redirect_to users_sign_in_path
+    def current_user_is_admin
+      render file: "#{Rails.root}/public/404.html", layout: false, status: 400 unless current_user.admin?
     end
 
     def current_user_is_staff
-      return if current_user.admin? || current_user.staff?
-
-      render file: "#{Rails.root}/public/404.html", layout: false,
-             status: :bad_request
+      render file: "#{Rails.root}/public/404.html", layout: false,  status: 400 unless current_user.admin? || current_user.staff?
     end
 
-    def current_user_is_admin
-      return if current_user.admin?
-
-      render file: "#{Rails.root}/public/404.html", layout: false,
-             status: :bad_request
+    def record_not_found
+      render file: "#{Rails.root}/public/404.html", status: 400, layout: false 
     end
   end
 end

@@ -9,7 +9,7 @@ import Turbolinks from "turbolinks";
 import * as ActiveStorage from "@rails/activestorage";
 import "channels";
 import "controllers";
-
+require("trix");
 require("@rails/actiontext");
 
 Rails.start();

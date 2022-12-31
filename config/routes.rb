@@ -22,20 +22,22 @@ Rails.application.routes.draw do
   resources :news, only: %i[index show]
   resources :theaters, only: %i[index show]
   resources :movies, only: %i[index show]
+  resources :cinemas, only: %i[index show]
+  post '/seats/index', to: 'seats#index'
 
   resources :orders do
     member do
+      get :pay
       patch :cancel
     end
   end
 
-  resources :tickets, only: %i[index show new create destroy] do
-    member do
-      get :pay
-    end
+  mount ActionCable.server => '/cable'
+  resources :tickets, only: %i[index show create] do
     collection do
       get :select_amount
-      post :checkout
+      get :select_seats
+      delete :destroy
     end
   end
 
@@ -75,15 +77,6 @@ Rails.application.routes.draw do
         delete :delete_images
         post :create_movie_poster
       end
-    end
-  end
-
-  resources :ticketing, only: %i[show create destroy] do
-    collection do
-      get :select_seats
-      post :tickets
-      post :checkout
-      post :seat_reservation, to: 'ticketing#seat_reservation'
     end
   end
 

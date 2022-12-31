@@ -12,12 +12,12 @@
         地點：<%= theater.name %> - <%= cinema.name %>廳
       </li>
       <li class="list-group-item ps-0 fw-semibold">
-        開演時間：<%= start_time %>
+        開演時間：<%= started_time %>
       </li>
     </ul>
     <ul class="list-group">
       <li class="list-group-item ps-0 py-4 fw-semibold">
-        總價: <span class="fs-3 fw-semibold" data-controller="users--select-amount--update-total-price" data-action="totalAdd@window->users--select-amount--update-total-price#update" data-users--select-amount--update-total-price-target="price">0</span>
+        總價: <span class="fs-3 fw-semibold" data-controller="users--select-amount--update-total-price" data-action="totalAdd@window->users--select-amount--update-total-price#update" data-users--select-amount--update-total-price-target="price"><%= total_price %></span>
       </li>
     </ul>
   </div>

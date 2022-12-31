@@ -1,8 +1,6 @@
 import { Controller } from "stimulus";
 
 export default class extends Controller {
-  static targets = ["amount"];
-
   connect() {
     this.amountArr = [0, 0, 0, 0];
   }
@@ -21,12 +19,11 @@ export default class extends Controller {
     }
 
     const amountSum = this.amountArr.reduce((a, b) => a + b, 0);
-    this.amountTarget.textContent = amountSum;
 
     if (amountSum === 0) {
       this.element.href = "#";
     } else {
-      const showtimeId = this.amountTarget.dataset.id;
+      const showtimeId = this.element.firstElementChild.dataset.showtimeId;
       const link = new URLSearchParams({
         showtime_id: showtimeId,
         regular_quantity: this.amountArr[0],
@@ -34,7 +31,7 @@ export default class extends Controller {
         elderly_quantity: this.amountArr[2],
         disability_quantity: this.amountArr[3],
       });
-      this.element.href = `/ticketing/select_seats?` + link.toString();
+      this.element.href = `/tickets/select_seats?` + link.toString();
     }
   }
 }
