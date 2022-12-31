@@ -11,33 +11,22 @@ class TicketsController < ApplicationController
   def show; end
 
   def create
-    info = ticket_params
-
-    @showtime = Showtime.find(ticket_params['showtime_id'].to_i)
-    @cinema = @showtime.cinema
-    @theater = @cinema.theater
-    info[:movie_name] = @showtime.movie.name
-    info[:cinema_name] = @cinema.name
-    info[:theater_name] = @theater.name
-
-    @ticket = Ticket.new(info)
+    infos = {showtime_id: params[:showtime_id], row: params[:row], column: params[:column]}
+    
+    @ticket = Ticket.new(infos)
+    @ticket.user = current_user
     if @ticket.save
-      redirect_to pay_ticket_path(@ticket)
+      render json: { msg: "success" }, status: :ok
     else
-      redirect_to root_path
+      render json: { msg: "fail" }, status: :ok
     end
   end
 
-  def pay
-    @ticket = Ticket.find(params[:id])
-    order = { slug: @ticket.serial, amount: 500, name: '電影票', email: current_user.email }
-    @form_info = Mpg.new(order).form_info
-  end
-
   def destroy
-    @ticket = Ticket.find(params[:id])
-    @ticket.destroy
-    redirect_to root_path
+    @ticket = Ticket.find_by({showtime_id: params[:showtime_id], row: params[:row], column: params[:column]})
+    @ticket.really_destroy!
+
+    render json: { msg: "cancel" }, status: :ok
   end
 
   def select_amount
@@ -47,6 +36,34 @@ class TicketsController < ApplicationController
     @theater = @showtime.cinema.theater
 
     @start_time = @showtime.started_at.strftime("%Y-%m-%d %I:%M %p")
+  end
+
+  def select_seats
+    session[:ticket9487] = ticket_params
+
+    @showtime = Showtime.find(params[:showtime_id])
+    @movie = @showtime.movie
+    @cinema = @showtime.cinema
+    @theater = @showtime.cinema.theater
+
+    @start_time = @showtime.started_at.strftime("%Y-%m-%d %I:%M %p")
+    @total_price = calcTotalPrice(ticket_params, @cinema)
+  end
+
+  def buy
+    ticket_amount = session[:ticket9487]
+
+    @showtime = Showtime.find(ticket_amount["showtime_id"])
+    @movie = @showtime.movie
+    @cinema = @showtime.cinema
+    @theater = @showtime.cinema.theater
+    @start_time = @showtime.started_at.strftime("%Y-%m-%d %I:%M %p")
+    @total_price = calcTotalPrice(ticket_amount, @cinema)
+
+    @tickets = current_user.tickets
+
+    order = { slug: @order.serial, amount: @order.amount, name: '電影票', email: current_user.email }
+    @form_info = Mpg.new(order).form_info
   end
 
   def checkout
@@ -68,7 +85,14 @@ class TicketsController < ApplicationController
   end
 
   def ticket_params
-    permitted = params.permit(:showtime_id, :regular_quantity, :concession_quantity, :elderly_quantity, :disability_quantity, :seat_list)
+    permitted = params.permit(:showtime_id, :regular_quantity, :concession_quantity, :elderly_quantity, :disability_quantity)
     permitted.to_h || {}
+  end
+
+  def calcTotalPrice(params, cinema)
+    params["regular_quantity"].to_i * cinema.regular_price + 
+    params["concession_quantity"].to_i * cinema.concession_price + 
+    params["elderly_quantity"].to_i * cinema.elderly_price + 
+    params["disability_quantity"].to_i * cinema.disability_price
   end
 end

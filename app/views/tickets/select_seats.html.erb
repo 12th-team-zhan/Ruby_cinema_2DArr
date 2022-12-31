@@ -1,0 +1,19 @@
+<div class="movie position-relative">
+  <%= render "movie_info", movie: @movie, theater: @theater, cinema: @cinema, total_price: @total_price, started_time: @start_time %>
+  <div class="body">
+    <div class="container-md px-lg-4p py-2 d-flex justify-content-between">
+      <div class="select-title">
+        <p class="fs-4 fw-light m-0 py-2">選取座位</p>
+      </div>
+      <%= link_to "確認訂單", orders_path, method: "post", class: "col-md-3 col-lg-2 text-center my-auto next btn btn-primary" %>
+    </div>
+  </div>
+  <div class="select d-flex flex-column align-items-center w-100">
+    <div class="screen text-white">銀幕位置</div>
+    <br>
+    <div data-controller="users--select-seats--show-seats" data-cinema-id="<%= @cinema.id %>" data-showtime-id="<%= @showtime.id %>" data-user-id="<%= current_user.id %>">
+      <div class="seat-grid" data-controller="users--select-seats--book-seat"></div>
+    </div>
+    </div>
+  </div>
+</div>

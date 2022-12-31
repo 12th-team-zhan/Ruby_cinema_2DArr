@@ -183,7 +183,10 @@ ActiveRecord::Schema.define(version: 2023_01_01_155555) do
     t.bigint "order_id"
     t.index ["order_id"], name: "index_tickets_on_order_id"
     t.bigint "user_id"
+    t.bigint "order_id"
+    t.index ["order_id"], name: "index_tickets_on_order_id"
     t.index ["user_id"], name: "index_tickets_on_user_id"
+    t.index ["showtime_id", "row", "column"], name: "index_tickets_on_showtime_id_and_row_and_column", unique: true
   end
 
   create_table "users", force: :cascade do |t|
