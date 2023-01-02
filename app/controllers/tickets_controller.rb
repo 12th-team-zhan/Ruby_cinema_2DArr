@@ -2,7 +2,6 @@
 
 class TicketsController < ApplicationController
   before_action :authenticate_user!, only: %i[create pay]
-  skip_before_action :verify_authenticity_token, only: %i[checkout change_status]
 
   def index
     @tickets = Ticket.all
@@ -39,7 +38,7 @@ class TicketsController < ApplicationController
   end
 
   def select_seats
-    session[:ticket9487] = ticket_params
+    session[:tickets9487] = ticket_params
 
     @showtime = Showtime.find(params[:showtime_id])
     @movie = @showtime.movie
@@ -48,34 +47,6 @@ class TicketsController < ApplicationController
 
     @start_time = @showtime.started_at.strftime("%Y-%m-%d %I:%M %p")
     @total_price = calcTotalPrice(ticket_params, @cinema)
-  end
-
-  def buy
-    ticket_amount = session[:ticket9487]
-
-    @showtime = Showtime.find(ticket_amount["showtime_id"])
-    @movie = @showtime.movie
-    @cinema = @showtime.cinema
-    @theater = @showtime.cinema.theater
-    @start_time = @showtime.started_at.strftime("%Y-%m-%d %I:%M %p")
-    @total_price = calcTotalPrice(ticket_amount, @cinema)
-
-    @tickets = current_user.tickets
-
-    order = { slug: @order.serial, amount: @order.amount, name: '電影票', email: current_user.email }
-    @form_info = Mpg.new(order).form_info
-  end
-
-  def checkout
-    response = MpgResponse.new(params[:TradeInfo])
-
-    if response.status == 'SUCCESS'
-      @result = response.result
-      @ticket = Ticket.find_by(serial: @result['MerchantOrderNo'])
-      render :checkout
-    else
-      redirect_to root_path, alert: '付款過程報錯，付款失敗'
-    end
   end
 
   private

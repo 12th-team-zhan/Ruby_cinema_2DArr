@@ -25,14 +25,15 @@ Rails.application.routes.draw do
   resources :cinemas, only: %i[index show]
   post '/seats/index', to: 'seats#index'
 
-  resources :orders do
+  resources :orders, only: [:index, :create, :destroy] do
     member do
       get :pay
-      patch :cancel
+    end
+    collection do
+      post :checkout
     end
   end
 
-  mount ActionCable.server => '/cable'
   resources :tickets, only: %i[index show create] do
     collection do
       get :select_amount

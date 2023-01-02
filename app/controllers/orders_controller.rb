@@ -1,36 +1,78 @@
 # frozen_string_literal: true
 
 class OrdersController < ApplicationController
-  before_action :authenticate_user!
-  before_action :find_order, only: %i[show cancel]
+  before_action :authenticate_user!, except: %i[checkout]
+  before_action :find_order, only: %i[destroy pay cancel]
+  skip_before_action :verify_authenticity_token, only: %i[checkout]
 
   def index
-    @orders = Order.includes(tickets: [showtime: [:movie, { cinema: :theater }]]).where(user_id: current_user.id).references(:tickets).paginate(
-      page: params[:page], per_page: 5,
-    ).order(created_at: :desc)
-  end
-
-  def new
-    @order = current_user.orders.new
+    @orders = current_user.orders.with_deleted.paginate(page: params[:page], per_page: 5).order(created_at: :desc)
   end
 
   def create
-    @order = current_user.orders.new(clean_order_params)
+    infos = session[:tickets9487]
+
+    @showtime = Showtime.find(infos["showtime_id"])
+    @movie = @showtime.movie
+    @cinema = @showtime.cinema
+    @theater = @cinema.theater
+    @total_price = calcTotalPrice(infos, @cinema)
+
+    @tickets = Ticket.where({user_id: current_user.id, showtime_id: infos["showtime_id"], status: "reserved"})
+
+    infos.delete("showtime_id")
+    infos.merge!({movie_name: @movie.name, theater_name: @theater.name, 
+                  cinema_name: @cinema.name, amount: @total_price, 
+                  started_at: @showtime.started_at})
+
+
+    @order = current_user.orders.new(infos)
     if @order.save
-      redirect_to orders_path, notice: "訂單已成立"
+      @tickets.each do |ticket|
+        ticket.update(order_id: @order.id)
+      end
+
+      redirect_to pay_order_path(@order)
     else
-      render :new, alert: "建立失敗"
+      redirect_back fallback_location: select_seats_tickets_path, alert: '訂單處理過程發生錯誤'
     end
   end
 
-  def show
-    @orders = Order.includes(tickets: [showtime: [:movie, { cinema: :theater }]]).where(slug: params[:id]).references(:tickets)
-    @order = @orders.first
+  def pay
+    @tickets = Ticket.where({user_id: current_user.id, order_id: @order.id})
+
+    order = { slug: @order.serial, amount: @order.amount.to_i, name: '電影票', email: current_user.email }
+    @form_info = Mpg.new(order).form_info
   end
 
-  def cancel
-    @order.update(status: "cancel")
-    render json: { status: "cancel" }
+  def checkout
+    response = MpgResponse.new(params[:TradeInfo])
+
+    if response.status == 'SUCCESS'
+      @result = response.result
+
+      @order = Order.find_by(serial: @result['MerchantOrderNo'])
+      @order.pay!
+
+      @tickets = @order.tickets
+      @tickets.each do |t|
+        t.pay!
+      end
+
+      redirect_to orders_path
+    else
+      redirect_to root_path, alert: '付款過程發生問題'
+    end
+  end
+
+  def destroy
+    @order.cancal!
+    @order.destroy
+
+    respond_to do |format|
+      format.html { redirect_to root_path }
+      format.json { render json: { status: "canceled" } }
+    end
   end
 
   private
@@ -41,5 +83,12 @@ class OrdersController < ApplicationController
 
   def find_order
     @order = current_user.orders.friendly.find(params[:id])
+  end
+
+  def calcTotalPrice(params, cinema)
+    params["regular_quantity"].to_i * cinema.regular_price + 
+    params["concession_quantity"].to_i * cinema.concession_price + 
+    params["elderly_quantity"].to_i * cinema.elderly_price + 
+    params["disability_quantity"].to_i * cinema.disability_price
   end
 end

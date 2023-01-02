@@ -1,0 +1,47 @@
+<div class="container">
+  <div class="row d-flex justify-content-evenly">
+    <div class="container p-3 col-12 col-md-7 col-lg-8">
+      <div class="col text-center">
+        <h2>確認訂單</h2>
+      </div>
+      <div class="col">
+        <table class="table table-striped">
+          <thead>
+            <tr class="table-secondary">
+              <th scope="col" class="col-2 col-md-3 text-center">訂購時間</th>
+              <th scope="col" class="col-7 col-md-6 text-start">訂購內容</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-center">
+                <p><%= @order.created_at.strftime("%Y/%m/%d %I:%M") %></p>
+              </td>
+              <td class="text-start mx-3">
+                <p>訂單序號: <%= @order.serial %></p>
+                <p>電影名稱：<%= @order.movie_name %></p>
+                <p>影城：<%= @order.theater_name %></p>
+                <p>影廳：<%= @order.cinema_name %></p>
+                <p>座位：<%= show_tickets_seat(@tickets) %></p>
+                <p>
+                  場次：<%= @order.started_at.strftime("%Y/%m/%d %I:%M") %>
+                </p>
+                <p>總計金額: <%= @order.amount %></p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col text-center">
+        <%= form_with(url: "https://ccore.newebpay.com/MPG/mpg_gateway", method: "post" ) do |f| %>
+          <input type="hidden" name="MerchantID" value="<%= @form_info[:MerchantID] %>" readonly>
+          <input type="hidden" name="Version" value="<%= @form_info[:Version] %>" readonly>
+          <input type="hidden" name="TradeInfo" value="<%= @form_info[:TradeInfo] %>" readonly>
+          <input type="hidden" name="TradeSha" value="<%= @form_info[:TradeSha] %>" readonly>
+          <%= f.submit "確認購買" %>
+          <%= link_to "取消", order_path(@order), method: "delete" %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

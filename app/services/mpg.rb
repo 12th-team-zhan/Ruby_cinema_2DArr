@@ -16,7 +16,7 @@ class Mpg
       MerchantID: @mid,
       TradeInfo: trade_info,
       TradeSha: trade_sha,
-      Version: '1.5'
+      Version: '2.0'
     }
   end
 
@@ -43,7 +43,7 @@ class Mpg
     # info[:NotifyURL] = ENV['NOTIFY_URL']
     info[:LoginType] = 0
     info[:CREDIT] =  1,
-                     info[:VACC] = 1
+    info[:VACC] = 1
   end
 
   def url_encoded_query_string
