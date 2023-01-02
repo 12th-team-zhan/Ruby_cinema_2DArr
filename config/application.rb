@@ -23,6 +23,9 @@ module RubyCinema
     config.active_record.default_timezone = :local
     # config.eager_load_paths << Rails.root.join("extras")
 
+    # ngrok
+    # config.hosts << ENV['NGROK_URL']
+
     # i18n setting
     config.i18n.default_locale = 'zh-TW'
   end

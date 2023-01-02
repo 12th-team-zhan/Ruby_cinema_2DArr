@@ -8,7 +8,7 @@ class MoviesController < ApplicationController
   end
 
   def root
-    @movies = Movie.all
+    @movies = Movie.order(debut_date: :desc)
     @news = News.order(created_at: :desc).limit(6)
     @theater_areas = Theater.areas
   end

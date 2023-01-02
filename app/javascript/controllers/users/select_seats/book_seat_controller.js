@@ -6,7 +6,6 @@ export default class extends Controller {
   connect() {
     this.showtimeId = this.element.parentElement.getAttribute("data-showtime-id");
     this.userId = this.element.parentElement.getAttribute("data-user-id");
-    console.log(this.showtimeId, this.userId);
 
     this.subscription = consumer.subscriptions.create(
       {

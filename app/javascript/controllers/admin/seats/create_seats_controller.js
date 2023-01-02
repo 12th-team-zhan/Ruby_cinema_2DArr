@@ -1,34 +1,27 @@
 import { Controller } from "stimulus";
+import { fetchWithoutParams, fetchWithParamsAndRedirect } from "../../lib/fetcher";
 
 export default class extends Controller {
   connect() {
-    const token = document.querySelector("meta[name='csrf-token']").content;
-    const cinemaId = this.element.dataset.cinemaId;
+    this.cinemaId = this.element.dataset.cinemaId;
+    const path = `/admin/cinemas/${this.cinemaId}/seats/new.json`;
+    const grid = this.element.firstElementChild;
 
-    fetch(`/admin/cinemas/${cinemaId}/seats/new.json`, {
-      method: "GET",
-      headers: {
-        "X-csrf-Token": token,
-      },
-    })
-      .then((resp) => {
-        return resp.json();
-      })
+    fetchWithoutParams(path, "GET")
       .then(({ seatList }) => {
         this.seatList = seatList;
 
-        this.maxRow = this.seatList.length;
-        this.maxColumn = this.seatList[0].length;
+        this.maxRow = seatList.length;
+        this.maxColumn = seatList[0].length;
 
-        this.makeSeatingChart(this.maxRow, this.maxColumn);
+        this.makeSeatingChart(grid, this.maxRow, this.maxColumn);
       })
       .catch((err) => {
         console.log(err);
       });
   }
 
-  makeSeatingChart(row, column) {
-    const grid = this.element.firstElementChild;
+  makeSeatingChart(grid, row, column) {
     grid.style.cssText += `grid-template-rows: repeat(${row}, 1fr);grid-template-columns: repeat(${column + 2}, 1fr);`;
 
     let seatItems = "";
@@ -52,14 +45,14 @@ export default class extends Controller {
 
     switch (seatStatus) {
       case "not added":
-        el.target.classList.remove("bg-transparent");
+        el.target.classList.remove("bg-transparent", "text-dark");
 
         el.target.dataset.status = "added";
 
         this.seatList[rowId][columnId] = 1;
         break;
       case "added":
-        el.target.classList.add("bg-transparent");
+        el.target.classList.add("bg-transparent", "text-dark");
 
         el.target.dataset.status = "not added";
 
@@ -71,27 +64,11 @@ export default class extends Controller {
   }
 
   createToTable() {
-    const token = document.querySelector("meta[name='csrf-token']").content;
-    const cinemaId = this.element.dataset.cinemaId;
-
+    const path = `/admin/cinemas/${this.cinemaId}/seats`;
     const seats = { seat_list: this.seatList };
 
-    fetch(`/admin/cinemas/${cinemaId}/seats`, {
-      method: "POST",
-      headers: {
-        "X-csrf-Token": token,
-        "Content-Type": "application/json",
-      },
-      redirect: "follow",
-      body: JSON.stringify(seats),
-    })
-      .then((resp) => {
-        if (resp.redirected) {
-          window.location.href = resp.url;
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    fetchWithParamsAndRedirect(path, "POST", seats).catch((err) => {
+      console.log(err);
+    });
   }
 }
