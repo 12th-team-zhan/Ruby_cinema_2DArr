@@ -135,6 +135,7 @@ ActiveRecord::Schema.define(version: 2023_01_01_155555) do
     t.integer "concession_quantity", default: 0
     t.integer "elderly_quantity", default: 0
     t.integer "disability_quantity", default: 0
+    t.datetime "started_at"
     t.index ["user_id"], name: "index_orders_on_user_id"
   end
 
