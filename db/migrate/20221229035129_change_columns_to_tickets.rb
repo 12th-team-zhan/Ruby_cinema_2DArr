@@ -1,6 +1,5 @@
 class ChangeColumnsToTickets < ActiveRecord::Migration[6.1]
   def change
-    remove_column(:tickets, :seat_list)
     remove_column(:tickets, :category)
     remove_column(:tickets, :movie_name)
     remove_column(:tickets, :theater_name)

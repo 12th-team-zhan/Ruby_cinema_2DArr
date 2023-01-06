@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Showtime < ApplicationRecord
+  # soft delete
   acts_as_paranoid
 
   # relationship

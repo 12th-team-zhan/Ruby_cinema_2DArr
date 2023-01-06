@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_01_01_155555) do
+ActiveRecord::Schema.define(version: 2023_01_06_101447) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -127,7 +127,6 @@ ActiveRecord::Schema.define(version: 2023_01_01_155555) do
     t.datetime "updated_at", precision: 6, null: false
     t.integer "amount", default: 0
     t.string "slug"
-    t.index ["slug"], name: "index_orders_on_slug", unique: true
     t.string "movie_name"
     t.string "theater_name"
     t.string "cinema_name"
@@ -136,6 +135,7 @@ ActiveRecord::Schema.define(version: 2023_01_01_155555) do
     t.integer "elderly_quantity", default: 0
     t.integer "disability_quantity", default: 0
     t.datetime "started_at"
+    t.index ["slug"], name: "index_orders_on_slug", unique: true
     t.index ["user_id"], name: "index_orders_on_user_id"
   end
 
@@ -144,8 +144,9 @@ ActiveRecord::Schema.define(version: 2023_01_01_155555) do
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "cinema_id"
     t.text "seat_list", default: [], array: true
-    t.string "category", default: "added"
+    t.datetime "deleted_at"
     t.index ["cinema_id"], name: "index_seats_on_cinema_id"
+    t.index ["deleted_at"], name: "index_seats_on_deleted_at"
   end
 
   create_table "showtimes", force: :cascade do |t|
@@ -173,21 +174,20 @@ ActiveRecord::Schema.define(version: 2023_01_01_155555) do
   end
 
   create_table "tickets", force: :cascade do |t|
-    t.integer "row"
-    t.integer "column"
     t.integer "status", default: 0
     t.string "serial"
-    t.integer "showtime_id"
     t.datetime "deleted_at"
+    t.integer "showtime_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "order_id"
-    t.index ["order_id"], name: "index_tickets_on_order_id"
     t.bigint "user_id"
-    t.bigint "order_id"
+    t.integer "row"
+    t.integer "column"
+    t.integer "use_status", default: 0
     t.index ["order_id"], name: "index_tickets_on_order_id"
-    t.index ["user_id"], name: "index_tickets_on_user_id"
     t.index ["showtime_id", "row", "column"], name: "index_tickets_on_showtime_id_and_row_and_column", unique: true
+    t.index ["user_id"], name: "index_tickets_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|

@@ -1,10 +1,14 @@
 # frozen_string_literal: true
 
 class Theater < ApplicationRecord
+  # friendly_id
   extend FriendlyId
+  friendly_id :name, use: :slugged
+
+  # soft delete
   acts_as_paranoid
 
-  # validates
+  # validation
   validates :name, presence: true
   validates :area, presence: true
   validates :address, presence: true
@@ -18,8 +22,6 @@ class Theater < ApplicationRecord
   has_rich_text :description
   has_rich_text :transportation
   
-
+  # enum -> area
   enum area: { north: 0, middle: 1, south: 2, east: 3 }
-
-  friendly_id :name, :use => [:slugged, :finders]
 end

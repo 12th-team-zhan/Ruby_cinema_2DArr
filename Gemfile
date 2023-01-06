@@ -4,6 +4,7 @@ source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '3.1.2'
+gem "aasm", "~> 5.4"
 gem 'aws-sdk-s3', require: false
 gem "babosa", "~> 2.0"
 gem 'bootsnap', '>= 1.4.4', require: false
@@ -29,8 +30,6 @@ gem 'turbolinks', '~> 5'
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 gem 'webpacker', '~> 5.0'
 gem 'will_paginate', '~> 3.3'
-gem 'rails-i18n'
-gem "aasm", "~> 5.4"
 
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]

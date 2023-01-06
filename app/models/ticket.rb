@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
 class Ticket < ApplicationRecord
+  # serial
   before_validation :generate_serial
+
+  # soft delete
   acts_as_paranoid
 
   ### Action table
@@ -15,6 +18,7 @@ class Ticket < ApplicationRecord
 
   # enum
   enum status: { reserved: 0, booked: 1 }
+  enum use_status: { unused: 0, used: 1, invalid: 2 }
 
   # validation
   validates :serial, presence: true, uniqueness: true
@@ -31,9 +35,6 @@ class Ticket < ApplicationRecord
       transitions from: :reserved, to: :booked
     end
   end
-
-  scope :includes_byorder_id, ->(orderid) {includes(showtime: [:movie,{ cinema: :theater }]).where(order_id: orderid).limit(1).references(:showtime).first
-  }
 
   private
 
