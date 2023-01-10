@@ -13,12 +13,11 @@ class Ticket < ApplicationRecord
 
   # relationship
   belongs_to :showtime
-  belongs_to :order
   belongs_to :user
 
   # enum
   enum status: { reserved: 0, booked: 1 }
-  enum use_status: { unused: 0, used: 1, invalid: 2 }
+  enum use_status: { unused: 0, used: 1, no_avail: 2 }
 
   # validation
   validates :serial, presence: true, uniqueness: true

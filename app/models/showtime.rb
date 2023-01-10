@@ -8,5 +8,4 @@ class Showtime < ApplicationRecord
   belongs_to :movie
   belongs_to :cinema
   has_many :tickets
-  has_many :orders, through: :tickets, source: :order
 end

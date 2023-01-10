@@ -11,7 +11,6 @@ class Order < ApplicationRecord
   # relationship
   belongs_to :user
   has_many :tickets
-  has_many :showtimes, through: :tickets, source: :showtime
 
   # validation
   validates :serial, presence: true, uniqueness: true
@@ -24,7 +23,7 @@ class Order < ApplicationRecord
   before_destroy :really_destroy_tickets!
     
   # enum -> status
-  enum status: { pending: 0, paid: 1, cancel: 2 }
+  enum status: { pending: 0, paid: 1, canceled: 2 }
 
   # AASM
   include AASM

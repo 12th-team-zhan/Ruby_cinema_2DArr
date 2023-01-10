@@ -39,29 +39,28 @@ class OrdersController < ApplicationController
   end
 
   def pay
+    @movie = Movie.find_by(name: @order.movie_name)
+
     @tickets = Ticket.where({user_id: current_user.id, order_id: @order.id})
 
-    order = { slug: @order.serial, amount: @order.amount.to_i, name: '電影票', email: current_user.email }
+    order = { slug: @order.serial, amount: @order.amount, name: '電影票', email: current_user.email }
     @form_info = Mpg.new(order).form_info
   end
 
   def checkout
     response = MpgResponse.new(params[:TradeInfo])
+    @result = response.result
 
+    @order = Order.find_by(serial: @result['MerchantOrderNo'])
+    @movie = Movie.find_by(name: @order.movie_name)
+    
     if response.status == 'SUCCESS'
-      @result = response.result
-
-      @order = Order.find_by(serial: @result['MerchantOrderNo'])
       @order.pay!
 
       @tickets = @order.tickets
       @tickets.each do |t|
         t.pay!
       end
-
-      redirect_to orders_path
-    else
-      redirect_to root_path, alert: '付款過程發生問題'
     end
   end
 

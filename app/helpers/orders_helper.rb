@@ -10,4 +10,14 @@ module OrdersHelper
 
     return result
   end
+
+  def order_status(status)
+    if status == 'SUCCESS'
+      html = " <h2><i class'fa-solid fa-thumbs-up me-3'></i>付款成功</h2>"
+    else
+      html = " <h2><i class='fa-regular fa-face-sad-tear me-3'></i>交易過程發生問題，付款失敗</h2>"
+    end
+    
+    html.html_safe
+  end
 end
