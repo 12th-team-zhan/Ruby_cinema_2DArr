@@ -1,4 +1,5 @@
 import { Controller } from "stimulus";
+import Swal from "sweetalert2";
 import { fetchWithParams } from "../lib/fetcher";
 import { addOptions, addOptionsWithConditions } from "../lib/add_options";
 import { resetOptions } from "../lib/reset_dropdown_options";
@@ -68,7 +69,7 @@ export default class extends Controller {
 
   changeLink() {
     const link = document.querySelector("#rootBuyTickets");
-    link.href = `/ticketing/select_tickets?showtimeid=${this.showtimeTarget.value}`;
+    link.href = `/tickets/select_amount?showtimeid=${this.showtimeTarget.value}`;
   }
 
   checkBookingData(e) {
@@ -76,7 +77,11 @@ export default class extends Controller {
       e.preventDefault();
       const link = document.querySelector("#rootSearchShowtime");
       link.href = `#`;
-      alert("請填寫查詢場次");
+      Swal.fire({
+        icon: "warning",
+        title: "Oops...",
+        text: `請填寫查詢場次`,
+      });
     }
   }
 

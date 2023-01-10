@@ -1,16 +1,11 @@
 import { Controller } from "stimulus";
+import Swal from "sweetalert2";
 import { fetchWithParams } from "../lib/fetcher";
 import { resetOptions } from "../lib/reset_dropdown_options";
 import { addOptions } from "../lib/add_options";
 
 export default class extends Controller {
-  static targets = [
-    "area",
-    "movieList",
-    "showtimeList",
-    "startTime",
-    "endTime",
-  ];
+  static targets = ["area", "movieList", "showtimeList", "startTime", "endTime"];
 
   addMovieList(el) {
     resetOptions(this.movieListTarget, "請選擇電影");
@@ -74,9 +69,7 @@ export default class extends Controller {
 
     var i = 6;
     for (i; i < 25; i++) {
-      options += `<option value="${this.autoSupplement(
-        i.toString()
-      )}:00" >${this.autoSupplement(i.toString())}:00</option>`;
+      options += `<option value="${this.autoSupplement(i.toString())}:00" >${this.autoSupplement(i.toString())}:00</option>`;
     }
     this.startTimeTarget.insertAdjacentHTML("beforeend", options);
     this.endTimeTarget.insertAdjacentHTML("beforeend", options);
@@ -95,19 +88,24 @@ export default class extends Controller {
       link.href = `/find_showtimes/search?${params}`;
     } else {
       e.preventDefault();
-      alert("開始時間不得晚於結束時間");
+      Swal.fire({
+        icon: "warning",
+        title: "Oops...",
+        text: `開始時間不得晚於結束時間`,
+      });
     }
   }
 
   checkAreaData(e) {
-    if (
-      this.startTimeTarget.value === "0" ||
-      this.endTimeTarget.value === "0"
-    ) {
+    if (this.startTimeTarget.value === "0" || this.endTimeTarget.value === "0") {
       e.preventDefault();
       const link = document.querySelector("#rootSearchShowtime");
       link.href = `#`;
-      alert("請填寫查詢時段");
+      Swal.fire({
+        icon: "warning",
+        title: "Oops...",
+        text: `請填寫查詢時段`,
+      });
     }
   }
 
