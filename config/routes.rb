@@ -38,6 +38,7 @@ Rails.application.routes.draw do
     collection do
       get :select_amount
       get :select_seats
+      get :records
       delete :destroy
     end
   end

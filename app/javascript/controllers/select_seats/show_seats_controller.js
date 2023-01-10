@@ -1,5 +1,5 @@
 import { Controller } from "stimulus";
-import { fetchWithParams } from "../../lib/fetcher";
+import { fetchWithParams } from "../lib/fetcher";
 
 export default class extends Controller {
   connect() {
@@ -39,16 +39,16 @@ export default class extends Controller {
   }
 
   makeSeat(status, row, column) {
-    let columnId = `<div class="item" data-row-id=${row} data-column-id=${column} data-status="vacancy" data-action="click->users--select-seats--book-seat#changeSeatStatus">${String(column + 1).padStart(2, "0")}</div>`;
+    let columnId = `<div class="item" data-row-id=${row} data-column-id=${column} data-status="vacancy" data-action="click->select-seats--book-seat#changeSeatStatus">${String(column + 1).padStart(2, "0")}</div>`;
 
     if (status == 0) {
       columnId = `<div class="item item-hidden" data-row-id=${row} data-column-id=${column}>${String(column + 1).padStart(2, "0")}</div>`;
     } else if (status == 2) {
-      columnId = `<div class="item bg-secondary text-white" data-row-id=${row} data-column-id=${column} data-status="booked">${String(column + 1).padStart(2, "0")}</div>`;
+      columnId = `<div class="item bg-LightRed text-white" data-row-id=${row} data-column-id=${column} data-status="booked">${String(column + 1).padStart(2, "0")}</div>`;
     } else if (status == 3) {
-      columnId = `<div class="item bg-success text-white" data-row-id=${row} data-column-id=${column} data-status="reserved" data-action="click->users--select-seats--book-seat#changeSeatStatus">${String(column + 1).padStart(2, "0")}</div>`;
+      columnId = `<div class="item bg-LightCerulean text-white" data-row-id=${row} data-column-id=${column} data-status="reserved" data-action="click->select-seats--book-seat#changeSeatStatus">${String(column + 1).padStart(2, "0")}</div>`;
     } else if (status == 4) {
-      columnId = `<div class="item bg-danger text-white" data-row-id=${row} data-column-id=${column} data-status="reserved">${String(column + 1).padStart(2, "0")}</div>`;
+      columnId = `<div class="item bg-MediumPurple text-white" data-row-id=${row} data-column-id=${column} data-status="reserved">${String(column + 1).padStart(2, "0")}</div>`;
     }
 
     return columnId;

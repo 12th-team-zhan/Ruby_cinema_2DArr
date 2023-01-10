@@ -1,18 +1,35 @@
 <div class="movie position-relative">
-  <%= render "movie_info", movie: @movie, theater: @theater, cinema: @cinema, total_price: @total_price, started_time: @start_time %>
+  <%= render "movie_info", movie: @movie, theater: @theater, cinema: @cinema, total_price: @total_price, started_time: @start_time, ticket_list: @ticket_list %>
   <div class="body">
-    <div class="container-md px-lg-4p py-2 d-flex justify-content-between">
-      <div class="select-title">
-        <p class="fs-4 fw-light m-0 py-2">選取座位</p>
+    <div class="container-md px-lg-4p py-3 d-flex justify-content-between">
+      <div class="select-title col-md-3 my-auto">
+        <p class="fs-4 fw-light text-md-center mb-0">選取座位</p>
       </div>
-      <%= link_to "確認訂單", orders_path, method: "post", class: "col-md-3 col-lg-2 text-center my-auto next btn btn-primary" %>
+      <%= link_to "確認訂單", orders_path, method: "post", class: "col-md-3 col-lg-2 text-center btn btn-primary text-white" %>
     </div>
   </div>
-  <div class="select d-flex flex-column align-items-center w-100">
+  <div class="select d-flex flex-column align-items-center py-3 px-2">
+    <div class="d-flex p-3">
+      <div class="d-flex p-3">
+        <div class="text-dark d-flex align-items-center">正在選取
+          <div class="item ms-3 bg-MediumPurple text-MediumPurple"></div>
+        </div>
+      </div>
+      <div class="d-flex flex-row flex-sm-column p-3">
+        <div class="text-dark d-flex align-items-center">已售出
+          <div class="item ms-3 bg-LightRed text-LightRed"></div>
+        </div>
+      </div>
+      <div class="d-flex flex-row flex-sm-column p-3">
+        <div class="text-dark d-flex align-items-center">您的位置
+          <div class="item ms-3 bg-LightCerulean text-LightCerulean"></div>
+        </div>
+      </div>
+    </div>
     <div class="screen text-white">銀幕位置</div>
     <br>
-    <div data-controller="users--select-seats--show-seats" data-cinema-id="<%= @cinema.id %>" data-showtime-id="<%= @showtime.id %>" data-user-id="<%= current_user.id %>">
-      <div class="seat-grid" data-controller="users--select-seats--book-seat"></div>
+    <div class="seat w-100 d-flex justify-content-center" data-controller="select-seats--show-seats" data-cinema-id="<%= @cinema.id %>" data-showtime-id="<%= @showtime.id %>" data-user-id="<%= current_user.id %>">
+      <div class="seat-grid" data-controller="select-seats--book-seat select-seats--broadcast-seat"></div>
     </div>
     </div>
   </div>

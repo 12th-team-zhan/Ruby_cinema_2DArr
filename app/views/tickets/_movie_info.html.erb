@@ -9,15 +9,26 @@
         級別：<%= Movie.human_attribute_name("film_rating.#{movie.film_rating}") %>
       </li>
       <li class="list-group-item ps-0 fw-semibold">
-        地點：<%= theater.name %> - <%= cinema.name %>廳
+        地點：<%= theater.name %> - <%= cinema.name %>
       </li>
       <li class="list-group-item ps-0 fw-semibold">
         開演時間：<%= started_time %>
       </li>
     </ul>
+    <% if ticket_list.present? %>
+      <ul class="list-group">
+        <li class="list-group-item ps-0 py-4 fw-semibold" data-controller="select-ticket-type">票種：
+          <span class="d-flex gap-2">
+            <% ticket_list.each do |type| %>
+              <div><%= type %></div>
+            <% end %>
+          </span>
+        </li>
+      </ul>
+    <% end %>
     <ul class="list-group">
       <li class="list-group-item ps-0 py-4 fw-semibold">
-        總價: <span class="fs-3 fw-semibold" data-controller="users--select-amount--update-total-price" data-action="totalAdd@window->users--select-amount--update-total-price#update" data-users--select-amount--update-total-price-target="price"><%= total_price %></span>
+        總價: <span class="fs-3 fw-semibold" data-controller="select-amount--update-total-price" data-action="totalAdd@window->select-amount--update-total-price#update" data-select-amount--update-total-price-target="price"><%= total_price %></span>
       </li>
     </ul>
   </div>
