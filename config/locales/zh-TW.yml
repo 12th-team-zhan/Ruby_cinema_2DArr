@@ -54,7 +54,7 @@ zh-TW:
         statuses:
           pending: 待付款
           paid: 已付款
-          cancel: 已取消
+          canceled: 已取消
     models:
       user: 使用者
   date:

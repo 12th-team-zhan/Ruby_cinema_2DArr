@@ -1,11 +1,11 @@
 import { Controller } from "stimulus";
-import { fetchWithoutParams } from "./lib/fetcher";
+import { fetchWithoutParams } from "../lib/fetcher";
 
 export default class extends Controller {
   static targets = ["cancelBtn", "orderStatus"];
 
   connect() {
-    this.setOrderState(this.element.dataset.canceled === "canceled");
+    this.setOrderState(this.element.dataset.status);
   }
 
   cancel() {
@@ -14,8 +14,11 @@ export default class extends Controller {
 
     fetchWithoutParams(path, "DELETE")
       .then(({ status }) => {
-        this.setOrderState(status === "canceled");
+        this.setOrderState(status);
         this.orderStatusTarget.textContent = "已取消";
+
+        var event = new CustomEvent("cancel", {});
+        window.dispatchEvent(event);
       })
       .catch((err) => {
         console.log(err);
@@ -23,7 +26,7 @@ export default class extends Controller {
   }
 
   setOrderState(state) {
-    if (state) {
+    if (state === "canceled") {
       this.cancelBtnTarget.classList.add("disabled");
     }
   }

@@ -1,61 +1,58 @@
 <div class="container px-lg-4p text-center">
   <div class="row d-flex justify-content-evenly">
-    <div class="col-12 col-md-10 col-lg-10">
-      <div class="container p-3">
-        <div class="col text-start">
-          <h3 class="card-text">HI! <%= current_user.name %></h3>
-          <h2>訂票信箱 <%= current_user.email %></h2>
-          <p class="fw-lighter">
-            若購票失敗，您的付款稍後將被取消，不會收取任何費用，可於 30 分後重新確認。
-          </p>
-        </div>
-        <div class="col">
-          <div class="container text-center">
-            <div class="row">
-              <table class="table table-striped">
-                <thead>
-                  <tr class="table-secondary">
-                    <th scope="col" class="col-2 col-md-3">訂購時間</th>
-                    <th scope="col" colspan="2" class="col-7 col-md-6 ">訂購內容</th>
+    <div class="container p-3 col-12 col-md-10 col-lg-10">
+      <div class="col text-start">
+        <h2 class="card-text">HI! <%= current_user.name %></h2>
+        <h2>訂票信箱 <%= current_user.email %></h2>
+        <p class="fw-lighter">
+          若購票失敗，您的付款稍後將被取消，不會收取任何費用，可於 30 分後重新確認。
+        </p>
+      </div>
+      <div class="col">
+        <div class="container text-center">
+          <div class="row">
+            <table class="table table-striped">
+              <thead>
+                <tr class="table-secondary">
+                  <th scope="col" class="col-2 col-md-3">訂購時間</th>
+                  <th scope="col" colspan="2" class="col-7 col-md-6 ">訂購內容</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @orders.each do |order| %>
+                  <tr>
+                    <td class="align-middle">
+                      <p><%= order.created_at.strftime("%Y/%m/%d %I:%M") %></p>
+                      <div data-controller="orders--cancelbtn" data-id="<%= order.id %>" data-status="<%= order.status %>">
+                        <p data-orders--cancelbtn-target="orderStatus">
+                          <%= Order.human_enum_name(:status, order.status)%>
+                        </p>
+                        <button class="btn btn-secondary btn-md mx-2" data-orders--cancelbtn-target="cancelBtn" data-action="click->orders--cancelbtn#cancel" data-confirm="確定取消訂單？">
+                          取消訂單
+                        </button>
+                      </div>
+                    </td>
+                    <td class="text-start mx-3">
+                      <p>取票序號: <%= order.serial %></p>
+                      <p>電影名稱: <%= order.movie_name %></p>
+                      <p>影城: <%= order.theater_name %></p>
+                      <p>場次: <%= order.started_at.strftime("%Y/%m/%d %I:%M") %></p>
+                      <div class="d-flex justify-content-between">
+                        <p>總計金額: <%= order.amount %></p>
+                      </div>
+                    </td>
+                    <td class="align-middle" data-controller="orders--detailbtn">
+                      <% if order.status == "paid" %>
+                        <%= link_to "查看電影票", order_path(order), class: "btn btn-secondary btn-md", data: {action: "cancel@window->orders--detailbtn#remove"} %>
+                      <% elsif order.status == "pending" %>
+                        <%= link_to "查看付款代碼", pay_order_path(order), class: "btn btn-secondary btn-md", data: {action: "cancel@window->orders--detailbtn#remove"} %>
+                      <% end %>
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  <% @orders.each do |order| %>
-                    <tr>
-                      <td class="align-middle">
-                        <p><%= order.created_at.strftime("%Y/%m/%d %I:%M") %></p>
-                        <div data-controller="order-cancelbtn"
-                             data-id="<%= order.id %>"
-                             data-canceled="<%= order.status %>">
-                          <p data-order-cancelbtn-target="orderStatus">
-                            <%= Order.human_enum_name(:status, order.status)%>
-                          </p>
-                          <% if order.status=="paid" %>
-                            <button method="patch"
-                                  class="btn btn-secondary btn-md mx-2"
-                                  data-order-cancelbtn-target="cancelBtn"
-                                  data-action="click->order-cancelbtn#cancel"
-                              data-confirm="Are you sure？"> 取消訂單
-                            </button>
-                          <% end %>
-                        </div>
-                      </td>
-                      <td class="text-start mx-3">
-                        <%= order_list(order) %>
-                      </td>
-                      <td class="align-middle">
-                        <% if order.status=="paid" %>
-                          <%= link_to "查看電影票", order_path(order), {class:"btn btn-secondary btn-md " } %>
-                        <% else %>
-                          <%= link_to "查看付款代碼", order_path(order), {class:"btn btn-secondary btn-md " } %>
-                        <% end %>
-                      </td>
-                    </tr>
-                  <% end %>
-                </tbody>
-              </table>
-              <%= will_paginate @orders, class: "d-flex gap-3 justify-content-center"%>
-            </div>
+                <% end %>
+              </tbody>
+            </table>
+            <%= will_paginate @orders, class: "d-flex gap-3 justify-content-center"%>
           </div>
         </div>
       </div>
