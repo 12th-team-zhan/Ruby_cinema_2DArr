@@ -5,6 +5,11 @@
       <div class="select-title col-md-3 my-auto">
         <p class="fs-4 fw-light text-md-center mb-0">選取座位</p>
       </div>
+      <div class="time col-md-4 text-center  my-auto" data-controller="select-seats--alarm-clock">
+        <p class="fs-4 fw-light m-0">
+          剩餘時間 : <span data-select-seats--alarm-clock-target="time"></span>
+        </p>
+      </div>
       <%= link_to "確認訂單", orders_path, method: "post", class: "col-md-3 col-lg-2 text-center btn btn-primary text-white" %>
     </div>
   </div>
