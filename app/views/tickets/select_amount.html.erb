@@ -1,11 +1,11 @@
 <div class="movie position-relative">
-  <%= render "movie_info", movie: @movie, theater: @theater, cinema: @cinema, total_price: 0, started_time: @showtime_started_time %>
+  <%= render "movie_info", movie: @movie, theater: @theater, cinema: @cinema, total_price: 0, started_time: @start_time, ticket_list: nil %>
   <div class="body">
     <div class="container-md px-lg-4p my-3 d-flex justify-content-between">
       <div class="select-title">
         <p class="fs-4 fw-light m-0 py-2">選取票種</p>
       </div>
-      <%= link_to '#', class: "col-md-2 col-lg-1 text-center my-auto next btn btn-primary", data: {controller: "users--select-amount--update-total-amount", action: "totalAdd@window->users--select-amount--update-total-amount#update"} do %>
+      <%= link_to '#', class: "col-md-2 col-lg-1 text-center my-auto next", data: {controller: "select-amount--update-total-amount", action: "totalAdd@window->select-amount--update-total-amount#update"} do %>
         <p class="fw-light m-0" data-showtime-id="<%= @showtime.id %>">下一步</p>
       <% end %>
     </div>
@@ -21,14 +21,14 @@
         <div class="col-4 fw-bold text-center">小計</div>
       </div>
     </div>
-    <div class="d-flex p-3 justify-content-around item" data-controller="users--select-amount--select-ticket-amount" data-ticket-type="regular">
+    <div class="d-flex p-3 justify-content-around item" data-controller="select-amount--select-ticket-amount" data-ticket-type="regular">
       <div class="col-6 col-md-9">
         <div class="fw-bold p-2">全票</div>
       </div>
       <div class="col-6 col-md-3 d-flex">
-        <div class="col-4 fw-bold text-center p-2 price" data-users--select-amount--select-ticket-amount-target="Price"><%= @cinema.regular_price %></div>
+        <div class="col-4 fw-bold text-center p-2 price" data-select-amount--select-ticket-amount-target="Price"><%= @cinema.regular_price %></div>
         <div class="col-4 fw-bold text-center" >
-          <select class="select" data-action="change->users--select-amount--select-ticket-amount#select" data-users--select-amount--select-ticket-amount-target="Amount">
+          <select class="select" data-action="change->select-amount--select-ticket-amount#select" data-select-amount--select-ticket-amount-target="Amount">
             <option selected>0</option>
             <option value="1">1</option>
             <option value="2">2</option>
@@ -37,17 +37,17 @@
             <option value="5">5</option>
           </select>
         </div>
-        <div class="col-4 fw-bold text-center p-2 total" data-users--select-amount--select-ticket-amount-target="Subtotal">0</div>
+        <div class="col-4 fw-bold text-center p-2 total" data-select-amount--select-ticket-amount-target="Subtotal">0</div>
       </div>
     </div>
-    <div class="d-flex p-3 justify-content-around item" data-controller="users--select-amount--select-ticket-amount" data-ticket-type="concession">
+    <div class="d-flex p-3 justify-content-around item" data-controller="select-amount--select-ticket-amount" data-ticket-type="concession">
       <div class="col-6 col-md-9">
         <div class="fw-bold p-2">優待票</div>
       </div>
       <div class="col-6 col-md-3 d-flex">
-        <div class="col-4 fw-bold text-center p-2 price" data-users--select-amount--select-ticket-amount-target="Price"><%= @cinema.concession_price %></div>
+        <div class="col-4 fw-bold text-center p-2 price" data-select-amount--select-ticket-amount-target="Price"><%= @cinema.concession_price %></div>
         <div class="col-4 fw-bold text-center" >
-          <select class="select" data-action="change->users--select-amount--select-ticket-amount#select" data-users--select-amount--select-ticket-amount-target="Amount">
+          <select class="select" data-action="change->select-amount--select-ticket-amount#select" data-select-amount--select-ticket-amount-target="Amount">
             <option selected>0</option>
             <option value="1">1</option>
             <option value="2">2</option>
@@ -56,17 +56,17 @@
             <option value="5">5</option>
           </select>
         </div>
-        <div class="col-4 fw-bold text-center p-2 total" data-users--select-amount--select-ticket-amount-target="Subtotal">0</div>
+        <div class="col-4 fw-bold text-center p-2 total" data-select-amount--select-ticket-amount-target="Subtotal">0</div>
       </div>
     </div>
-    <div class="d-flex p-3 justify-content-around item" data-controller="users--select-amount--select-ticket-amount" data-ticket-type="elderly">
+    <div class="d-flex p-3 justify-content-around item" data-controller="select-amount--select-ticket-amount" data-ticket-type="elderly">
       <div class="col-6 col-md-9">
         <div class="fw-bold p-2">敬老票</div>
       </div>
       <div class="col-6 col-md-3 d-flex">
-        <div class="col-4 fw-bold text-center p-2 price" data-users--select-amount--select-ticket-amount-target="Price"><%= @cinema.elderly_price %></div>
+        <div class="col-4 fw-bold text-center p-2 price" data-select-amount--select-ticket-amount-target="Price"><%= @cinema.elderly_price %></div>
         <div class="col-4 fw-bold text-center" >
-          <select class="select" data-action="change->users--select-amount--select-ticket-amount#select" data-users--select-amount--select-ticket-amount-target="Amount">
+          <select class="select" data-action="change->select-amount--select-ticket-amount#select" data-select-amount--select-ticket-amount-target="Amount">
             <option selected>0</option>
             <option value="1">1</option>
             <option value="2">2</option>
@@ -75,17 +75,17 @@
             <option value="5">5</option>
           </select>
         </div>
-        <div class="col-4 fw-bold text-center p-2 total" data-users--select-amount--select-ticket-amount-target="Subtotal">0</div>
+        <div class="col-4 fw-bold text-center p-2 total" data-select-amount--select-ticket-amount-target="Subtotal">0</div>
       </div>
     </div>
-    <div class="d-flex p-3 justify-content-around item" data-controller="users--select-amount--select-ticket-amount" data-ticket-type="disabled">
+    <div class="d-flex p-3 justify-content-around item" data-controller="select-amount--select-ticket-amount" data-ticket-type="disabled">
       <div class="col-6 col-md-9">
         <div class="fw-bold p-2">愛心票</div>
       </div>
       <div class="col-6 col-md-3 d-flex">
-        <div class="col-4 fw-bold text-center p-2 price" data-users--select-amount--select-ticket-amount-target="Price"><%= @cinema.disability_price %></div>
+        <div class="col-4 fw-bold text-center p-2 price" data-select-amount--select-ticket-amount-target="Price"><%= @cinema.disability_price %></div>
         <div class="col-4 fw-bold text-center" >
-          <select class="select" data-action="change->users--select-amount--select-ticket-amount#select" data-users--select-amount--select-ticket-amount-target="Amount">
+          <select class="select" data-action="change->select-amount--select-ticket-amount#select" data-select-amount--select-ticket-amount-target="Amount">
             <option selected>0</option>
             <option value="1">1</option>
             <option value="2">2</option>
@@ -94,7 +94,7 @@
             <option value="5">5</option>
           </select>
         </div>
-        <div class="col-4 fw-bold text-center p-2 total" data-users--select-amount--select-ticket-amount-target="Subtotal">0</div>
+        <div class="col-4 fw-bold text-center p-2 total" data-select-amount--select-ticket-amount-target="Subtotal">0</div>
       </div>
     </div>
   </div>
