@@ -42,8 +42,8 @@ zh-TW:
         middle: 中部
         south: 南部
         east: 東部
-      ticket/status:
-        unuses: 未使用
+      ticket/use_status:
+        unused: 未使用
         used: 已使用
         no_avail: 無效
       user/role:

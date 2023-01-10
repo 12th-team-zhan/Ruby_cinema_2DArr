@@ -23,11 +23,11 @@
                   <tr>
                     <td class="align-middle">
                       <p><%= order.created_at.strftime("%Y/%m/%d %I:%M") %></p>
-                      <div data-controller="orders--cancelbtn" data-id="<%= order.id %>" data-status="<%= order.status %>">
-                        <p data-orders--cancelbtn-target="orderStatus">
+                      <div data-controller="orders--index--cancelbtn" data-id="<%= order.id %>" data-status="<%= order.status %>">
+                        <p data-orders--index--cancelbtn-target="orderStatus">
                           <%= Order.human_enum_name(:status, order.status)%>
                         </p>
-                        <button class="btn btn-secondary btn-md mx-2" data-orders--cancelbtn-target="cancelBtn" data-action="click->orders--cancelbtn#cancel" data-confirm="確定取消訂單？">
+                        <button class="btn btn-secondary btn-md mx-2" data-orders--index--cancelbtn-target="cancelBtn" data-action="click->orders--index--cancelbtn#cancel" data-confirm="確定取消訂單？">
                           取消訂單
                         </button>
                       </div>
@@ -41,11 +41,11 @@
                         <p>總計金額: <%= order.amount %></p>
                       </div>
                     </td>
-                    <td class="align-middle" data-controller="orders--detailbtn">
+                    <td class="align-middle" data-controller="orders--index--detailbtn">
                       <% if order.status == "paid" %>
-                        <%= link_to "查看電影票", order_path(order), class: "btn btn-secondary btn-md", data: {action: "cancel@window->orders--detailbtn#remove"} %>
+                        <%= link_to "查看電影票", order_path(order), class: "btn btn-secondary btn-md", data: {action: "cancel@window->orders--index--detailbtn#remove"} %>
                       <% elsif order.status == "pending" %>
-                        <%= link_to "查看付款代碼", pay_order_path(order), class: "btn btn-secondary btn-md", data: {action: "cancel@window->orders--detailbtn#remove"} %>
+                        <%= link_to "查看付款代碼", pay_order_path(order), class: "btn btn-secondary btn-md", data: {action: "cancel@window->orders--index--detailbtn#remove"} %>
                       <% end %>
                     </td>
                   </tr>

@@ -25,7 +25,7 @@ Rails.application.routes.draw do
   resources :cinemas, only: %i[index show]
   post '/seats/index', to: 'seats#index'
 
-  resources :orders, only: [:index, :create, :destroy] do
+  resources :orders, only: [:index, :show, :create, :destroy] do
     member do
       get :pay
     end

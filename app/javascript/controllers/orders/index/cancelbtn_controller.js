@@ -1,5 +1,5 @@
 import { Controller } from "stimulus";
-import { fetchWithoutParams } from "../lib/fetcher";
+import { fetchWithoutParams } from "../../lib/fetcher";
 
 export default class extends Controller {
   static targets = ["cancelBtn", "orderStatus"];

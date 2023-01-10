@@ -11,6 +11,12 @@ module OrdersHelper
     return result
   end
 
+  def show_ticket_seat(ticket)
+    result = "#{(ticket.row + 65).chr}#{ticket.column.to_s.rjust(2, "0")}"
+
+    return result
+  end
+
   def order_status(status)
     if status == 'SUCCESS'
       html = " <h2><i class'fa-solid fa-thumbs-up me-3'></i>付款成功</h2>"

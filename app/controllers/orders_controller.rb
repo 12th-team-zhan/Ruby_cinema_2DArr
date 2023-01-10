@@ -2,11 +2,15 @@
 
 class OrdersController < ApplicationController
   before_action :authenticate_user!, except: %i[checkout]
-  before_action :find_order, only: %i[destroy pay cancel]
+  before_action :find_order, only: %i[destroy pay cancel show]
   skip_before_action :verify_authenticity_token, only: %i[checkout]
 
   def index
     @orders = current_user.orders.with_deleted.paginate(page: params[:page], per_page: 5).order(created_at: :desc)
+  end
+
+  def show
+    @tickets = @order.tickets
   end
 
   def create
@@ -81,7 +85,7 @@ class OrdersController < ApplicationController
   end
 
   def find_order
-    @order = current_user.orders.friendly.find(params[:id])
+    @order = current_user.orders.find(params[:id])
   end
 
   def calcTotalPrice(params, cinema)
