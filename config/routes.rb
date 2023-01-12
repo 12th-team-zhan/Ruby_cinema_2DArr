@@ -53,7 +53,7 @@ Rails.application.routes.draw do
 
   namespace :admin do
     resources :users, only: %i[index edit update delete]
-    resources :showtimes, only: %i[show]
+    resources :showtimes, only: %i[destroy]
     resources :news
     resources :orders
 
@@ -73,7 +73,7 @@ Rails.application.routes.draw do
 
     resources :movies do
       resource :movie_theater, only: %i[create destroy]
-      resources :showtimes, only: %i[index create destroy]
+      resources :showtimes, only: %i[index create]
 
       member do
         delete :delete_images

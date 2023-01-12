@@ -1,27 +1,27 @@
 <div data-controller="admin--showtimes--add-cinema-list" class="new_showtime text-light bg-slategray p-3 rounded">
-  <%= form_with(model: @showtime, url: admin_movie_showtimes_path(@movie), method: "post", local: false) do |form| %>
+  <%= form_with(model: showtime, url: admin_movie_showtimes_path(movie), method: "post", local: false) do |form| %>
     <div class="d-flex">
       <div class="col-11 d-flex">
         <div class="col-3 d-flex align-items-center">
           <div class="fs-5 text-nowrap m-1">開始時間</div>
-          <input class="form-control p-1 w-75" type="datetime-local" name="showtime[started_at]" min="<%= Time.now.strftime("%Y-%m-%dT%H:%M") %>">
+          <input class="form-control p-1 w-75" type="datetime-local" name="showtime[started_at]" min="<%= Time.now.strftime("%Y-%m-%dT%H:%M") %>" id="started_at">
         </div>
         <div class="col-3 d-flex align-items-center">
           <div class="fs-5 text-nowrap m-1">結束時間</div>
-          <input class="form-control p-1 w-75" type="datetime-local" name="showtime[end_at]" min="<%= Time.now.strftime("%Y-%m-%dT%H:%M") %>">
+          <input class="form-control p-1 w-75" type="datetime-local" name="showtime[end_at]" min="<%= Time.now.strftime("%Y-%m-%dT%H:%M") %>" id="end_at">
         </div>
         <div class="col-3 d-flex align-items-center" data-action="change->admin--showtimes--add-cinema-list#addCinemaList">
           <div class="fs-5 text-nowrap m-1">上映影城</div>
-          <select class="form-control p-1 w-75"  data-admin--showtimes--add-cinema-list-target="theater">
+          <select class="form-control p-1 w-75" id="theater" data-admin--showtimes--add-cinema-list-target="theater">
             <option>請選擇影城</option>
-            <% @theaters.each do |theater| %>
-              <option value="<%= theater[1] %>" ><%= theater[0] %></option>
+            <% theaters.each do |theater| %>
+              <option value="<%= theater.id %>" ><%= theater.name %></option>
             <% end %>
           </select>
         </div>
         <div class="col-3 d-flex align-items-center">
           <div class="fs-5 text-nowrap m-1">選擇影廳</div>
-          <select class="form-control p-1 w-75" name="showtime[cinema_id]" data-admin--showtimes--add-cinema-list-target="cinemaList">
+          <select class="form-control p-1 w-75" name="showtime[cinema_id]" id="cinema" data-admin--showtimes--add-cinema-list-target="cinemaList">
             <option>請選擇影廳</option>
           </select>
         </div>

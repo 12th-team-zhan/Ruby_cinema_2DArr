@@ -1,3 +1,22 @@
-var showtimes = document.querySelector('.showtimes')
-var tr = "<%= j render @showtime %>"
-showtimes.insertAdjacentHTML("afterbegin", tr)
+var showtimes = document.querySelector('.showtimes');
+var tr = "<%= j render @showtime %>";
+showtimes.insertAdjacentHTML("afterbegin", tr);
+
+var started_at = document.querySelector("#started_at");
+started_at.value = "";
+
+var end_at = document.querySelector("#end_at");
+end_at.value = "";
+
+var theater = document.querySelector("#theater");
+theater.selectedIndex = 0;
+
+var cinema = document.querySelector("#cinema");
+resetOptions(cinema, "請選擇影廳");
+
+function resetOptions(target, text) {
+  let Option = `<option>${text}</option>`;
+
+  target.replaceChildren();
+  target.insertAdjacentHTML("beforeend", Option);
+}

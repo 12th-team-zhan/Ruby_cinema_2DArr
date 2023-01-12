@@ -12,7 +12,7 @@
       </div>
       <div class="container">
         <h2 class="text-dark fs-6">片長：<%= @movie.duration %>分鐘</h2>
-        <%= render "new" %>
+        <%= render "new", showtime: @showtime, movie: @movie, theaters: @theaters %>
         <table class="table table-striped my-3">
           <thead class="text-bg-slategray">
             <tr>
