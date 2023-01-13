@@ -10,7 +10,7 @@ module Admin
 
       @showtime = Showtime.new
 
-      @showtimes = Showtime.order(started_at: :desc).includes(:cinema => [:theater]).paginate(page: params[:page], per_page: 10)
+      @showtimes = @movie.showtimes.order(started_at: :desc).includes(:cinema => [:theater]).paginate(page: params[:page], per_page: 10)
     end
 
     def create

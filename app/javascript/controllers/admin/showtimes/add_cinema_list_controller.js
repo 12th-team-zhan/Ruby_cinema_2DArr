@@ -6,8 +6,7 @@ export default class extends Controller {
   static targets = ["theater", "cinemaList"];
 
   addCinemaList(el) {
-    resetOptions(this.cinemaListTarget, "請選擇影廳");
-    this.cinemaListTarget.disabled = false;
+    resetOptions(this.cinemaListTarget, "請選擇影廳", false);
 
     this.theaterId = el.target.value;
     fetchWithParams("/api/v1/cinema_list", "POST", {
