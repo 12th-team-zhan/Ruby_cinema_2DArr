@@ -55,7 +55,4 @@ gmail: z851039@gmail.com
 github：charsin1olly  
 gmail: charsin1olly@gmail.com  
 
-## 網址  
-https://rubycinema.herokuapp.com/  
-
 ##### 本專案以威秀影城官網為原型進行復刻練習，不進行任何營利行為  
