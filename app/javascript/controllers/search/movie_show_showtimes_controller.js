@@ -3,14 +3,7 @@ import { fetchWithParams } from "../lib/fetcher";
 import { addList } from "../lib/add_options";
 
 export default class extends Controller {
-  static targets = [
-    "theater",
-    "showtimeDate",
-    "showtime",
-    "dateDropdownBtn",
-    "showtimeSelect",
-    "showtimeTable",
-  ];
+  static targets = ["theater", "showtimeDate", "showtime", "dateDropdownBtn", "showtimeSelect", "showtimeTable"];
 
   addShowtimeDate(el) {
     this.resetShowtimeDate();
@@ -35,11 +28,7 @@ export default class extends Controller {
           }
         });
 
-        addList(
-          date,
-          this.showtimeDateTarget,
-          "click->search--movie-show-showtimes#addShowtime"
-        );
+        addList(date, this.showtimeDateTarget, "click->search--movie-show-showtimes#addShowtime");
       })
       .catch((err) => {
         console.log(err);
@@ -64,7 +53,7 @@ export default class extends Controller {
             <td>${showtime[1]}</td>
             <td class="align-middle">
               <button class="btn btn-outline-Silver p-0 m-auto">
-                <a href="/ticketing/select_tickets?showtimeid=${showtime[2]}" class="link-Silver d-block px-4 py-1">Go</a>
+                <a href="/tickets/select_amount?showtimeid=${showtime[2]}" class="link-Silver d-block px-4 py-1">Go</a>
               </button>
             </td>
           </tr>`;

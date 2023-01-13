@@ -16,7 +16,7 @@
           <select class="form-select w-90" 
                     aria-label="select" 
                     data-action="change->search--search-showtime-by-area#addMovieList"
-            data-search--search-showtime-by-area-target="area">
+                    data-search--search-showtime-by-area-target="area">
             <option>請選擇地區</option>
             <% @theater_areas.each do |theater_area| %>
               <option value="<%= theater_area[1] %>" ><%= Theater.human_attribute_name("area.#{theater_area[0]}") %></option>
@@ -99,7 +99,7 @@
               <td><%= showtime.cinema.name %></td>
               <td><%= showtime.started_at.strftime("%Y-%m-%d") %></td>
               <td><%= showtime.started_at.strftime("%I:%M %p") %></td>
-              <td><%= link_to "前往購票", "/ticketing/select_tickets?showtimeid=#{showtime.id}" %></td>
+              <td><%= link_to "前往購票", "/tickets/select_amount?showtimeid=#{showtime.id}" %></td>
             </tbody>
           <% end %>
         </table>
