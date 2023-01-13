@@ -3,18 +3,16 @@
 module Admin
   class MoviesController < AdminController
     before_action :authenticate_user!
-    before_action :find_movie, only: %i[show edit update destroy]
+    before_action :find_movie, only: %i[edit update destroy]
 
     def index
-      @movies = Movie.order(id: :desc)
+      @movies = Movie.order(debut_date: :desc)
     end
 
     def new
       @movie = Movie.new
       @theaters = Theater.all
     end
-
-    def show; end
 
     def edit
       @theaters = Theater.all
@@ -33,11 +31,12 @@ module Admin
     def create
       @movie = current_user.movies.create(movie_params)
       @theaters = Theater.all
+
       if @movie.save
         append_movie_poster
 
         if params["theater"].present?
-          params.require(:theater).values.map do |theater|
+          params.require(:theater).each do |theater|
             MovieTheater.create(movie_id: @movie.id, theater_id: theater.to_i)
           end
         end
@@ -50,12 +49,14 @@ module Admin
 
     def destroy
       @movie.destroy
+
       redirect_to admin_movies_path, notice: "刪除成功"
     end
 
     def delete_images
       @image = ActiveStorage::Attachment.find(params[:id])
       @image.purge
+
       redirect_to admin_movies_path
     end
 

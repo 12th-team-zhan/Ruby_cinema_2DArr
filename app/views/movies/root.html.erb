@@ -71,3 +71,19 @@
     </ul>
   </div>
 </article>
+<section class="container-fluid bg-light">
+  <h4>最新上映</h4>
+  <div class="items row slider" data-controller='root--movie-slick'>
+    <% @movies.slice(1..6).each do |movie| %>
+      <%= link_to movie_path(movie) do %>
+        <div class="card col-sm-2" style="width: 100%">
+          <%= image_tag movie.movie_poster, class: "card-img-top", style: "height: 400px;" %>
+          <div class="card-body text-dark">
+            <h5 class="card-title"><%= movie.name %></h5>
+            <h5 class="card-title"><%= movie.eng_name %></h5>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</section>
